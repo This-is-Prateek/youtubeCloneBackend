@@ -121,9 +121,11 @@ const loginUser = asyncHandler(async (req, res) => { //working
     const loggedInUser = await User.findById(user._id).select("-password -refreshToken");
 
     const options = {
-        httponly: true,
-        secure: true
-    };
+        httpOnly: true,
+        sameSite: "None",
+        secure: true,
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      };
 
     res.cookie("accessToken", accessToken, options);
     res.cookie("refreshToken", refreshToken, options);
@@ -345,16 +347,16 @@ const updateUserCoverImage = asyncHandler(async (req, res) => { //working todo:d
 })
 
 const getUserChannelProfile = asyncHandler(async (req, res) => { //working
-    const { username } = req.params;
+    const { userId } = req.params;
 
-    if (!username?.trim()) {
-        throw new ApiError(400, "username is missing")
+    if (!userId?.trim()) {
+        throw new ApiError(400, "userId is missing")
     }
 
     const channel = await User.aggregate([
         {
             $match: {
-                userName: username?.toLowerCase()
+                _id: new mongoose.Types.ObjectId(String(userId))
             }
         },
         {

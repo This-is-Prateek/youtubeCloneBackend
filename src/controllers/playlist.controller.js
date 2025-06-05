@@ -39,12 +39,14 @@ const getUserPlaylists = asyncHandler(async (req, res) => { //working
     try {
         const playlists = await Playlist.aggregate([{ $match: { owner: new mongoose.Types.ObjectId(`${userId}`) } }]);
         if (playlists.length === 0) {
-            throw new ApiError(404, "No playlists found for the user");
+            return res.status(404).json(new ApiResponse(404, {}, "No playlists found for the user"));
         }
         return res
             .status(200)
             .json(new ApiResponse(200, playlists, "User playlists fetched successfully"));
     } catch (error) {
+        console.log(error);
+
         throw new ApiError(500, "Internal server error fetching user playlists", error);
     }
 })

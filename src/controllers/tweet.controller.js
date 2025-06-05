@@ -44,7 +44,7 @@ const getUserTweets = asyncHandler(async (req, res) => { //working
         ])
 
         if (tweets.length === 0) {
-            throw new ApiError(404, "no tweets for user are available")
+            return res.status(404).json(new ApiResponse(404, {}, "no tweets for user are available"));
         }
 
         return res
