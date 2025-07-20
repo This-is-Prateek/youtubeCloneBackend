@@ -22,7 +22,22 @@ functions:
   app:
     handler: src/lambda.handler
     events:
-      - httpApi: '*'
+      - httpApi:
+          cors:
+            allowedOrigins:
+              - https://youtube-clone-mauve-omega.vercel.app
+              - http://localhost:3000
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - PATCH
+              - DELETE
+              - OPTIONS
+            allowedHeaders:
+              - Content-Type
+              - Authorization
+            allowCredentials: true
 
 plugins:
   - serverless-esbuild 
