@@ -18,26 +18,30 @@ provider:
     CLOUDINARY_API_KEY: ${env:CLOUDINARY_API_KEY}
     CLOUDINARY_API_SECRET: ${env:CLOUDINARY_API_SECRET}
 
+  httpApi:
+    cors:
+      allowedOrigins:
+        - https://youtube-clone-mauve-omega.vercel.app
+        - http://localhost:3000
+      allowedMethods:
+        - GET
+        - POST
+        - PUT
+        - PATCH
+        - DELETE
+        - OPTIONS
+      allowedHeaders:
+        - Content-Type
+        - Authorization
+      allowCredentials: true
+
 functions:
   app:
     handler: src/lambda.handler
     events:
       - httpApi:
-          cors:
-            allowedOrigins:
-              - https://youtube-clone-mauve-omega.vercel.app
-              - http://localhost:3000
-            allowedMethods:
-              - GET
-              - POST
-              - PUT
-              - PATCH
-              - DELETE
-              - OPTIONS
-            allowedHeaders:
-              - Content-Type
-              - Authorization
-            allowCredentials: true
+          path: /{proxy+}
+          method: '*'
 
 plugins:
   - serverless-esbuild 
