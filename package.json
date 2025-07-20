@@ -5,17 +5,25 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon --env-file=.env src/index.js"
+    "dev": "nodemon --env-file=.env src/index.js",
+    "deploy": "npx serverless deploy",
+    "remove": "npx serverless remove",
+    "logs": "npx serverless logs -f app",
+    "deploy:prod": "npx serverless deploy --stage prod",
+    "deploy:dev": "npx serverless deploy --stage dev",
+    "bundle": "npx serverless package"
   },
   "author": "Prateek Kumawat",
   "license": "ISC",
   "devDependencies": {
     "nodemon": "^3.1.7",
-    "prettier": "^3.3.3"
+    "prettier": "^3.3.3",
+    "serverless": "^3.40.0",
+    "serverless-esbuild": "^1.55.1"
   },
   "dependencies": {
-    "bcrypt": "^5.1.1",
+    "@codegenie/serverless-express": "^4.16.0",
+    "bcryptjs": "^3.0.2",
     "cloudinary": "^2.5.1",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",

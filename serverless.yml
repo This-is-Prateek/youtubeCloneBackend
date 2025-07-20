@@ -1,0 +1,46 @@
+service: express-on-lambda
+useDotenv: true
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  region: ap-south-1
+  environment:
+    MONGODB_URI: ${env:MONGODB_URI}
+    CORS_ORIGIN: ${env:CORS_ORIGIN}
+    REFRESH_TOKEN_SECRET: ${env:REFRESH_TOKEN_SECRET}
+    REFRESH_TOKEN_EXPIRY: ${env:REFRESH_TOKEN_EXPIRY}
+    ACCESS_TOKEN_SECRET: ${env:ACCESS_TOKEN_SECRET}
+    ACCESS_TOKEN_EXPIRY: ${env:ACCESS_TOKEN_EXPIRY}
+    CLOUDINARY_CLOUD_NAME: ${env:CLOUDINARY_CLOUD_NAME}
+    CLOUDINARY_API_KEY: ${env:CLOUDINARY_API_KEY}
+    CLOUDINARY_API_SECRET: ${env:CLOUDINARY_API_SECRET}
+
+functions:
+  app:
+    handler: src/lambda.handler
+    events:
+      - httpApi: '*'
+
+plugins:
+  - serverless-esbuild 
+
+package:
+  exclude:
+    - server.js
+    - .env               
+
+custom:
+  esbuild:
+    bundle: true
+    minify: false
+    sourcemap: false
+    target: node20
+    platform: node
+    concurrency: 10
+    external:
+      - mock-aws-s3
+      - nock
+      - '@mapbox/node-pre-gyp'

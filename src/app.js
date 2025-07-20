@@ -2,15 +2,24 @@ import express from "express"
 import cors from "cors"
 import cookieParser from "cookie-parser"
 
-const app = express()
+console.log("🚀 Express app initialized");
+
+const app = express();
+
+app.use((req, res, next) => {
+    console.log(`📥 Incoming Request: ${req.method} ${req.originalUrl}`);
+    next();
+});
+
+const origin =  process.env.DEV_ORIGIN || process.env.CORS_ORIGIN
 
 app.use(cors({
-    origin: process.env.CORS_ORIGIN,
+    origin: origin,
     credentials: true
 }))
 
-app.use(express.json({limit: "16kb"}))
-app.use(express.urlencoded({extended: true, limit: "16kb"}))
+app.use(express.json({ limit: "16kb" }))
+app.use(express.urlencoded({ extended: true, limit: "16kb" }))
 app.use(express.static("public"))
 app.use(cookieParser())
 

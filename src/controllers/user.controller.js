@@ -80,6 +80,8 @@ const registerUser = asyncHandler(async (req, res) => {
             throw new ApiError(500, "Something went wrong while registering the user");
         }
 
+        console.log("User registered successfully:", createdUser);
+
         return res.status(201).json(
             new ApiResponse(201, createdUser, "User registered successfully")
         );
@@ -119,6 +121,8 @@ const loginUser = asyncHandler(async (req, res) => { //working
     const { accessToken, refreshToken } = await generateAccessAndRefreshToken(user._id);
 
     const loggedInUser = await User.findById(user._id).select("-password -refreshToken");
+
+    console.log("User logged in successfully:", loggedInUser);
 
     const options = {
         httpOnly: true,
@@ -226,6 +230,8 @@ const changeCurrentPassword = asyncHandler(async (req, res) => { //working
     user.password = newPassword
     await user.save({ validateBeforeSave: false })
 
+    console.log("Password changed successfully for user:", user._id);
+
     return res
         .status(200)
         .json(
@@ -263,6 +269,8 @@ const updateAccountDetails = asyncHandler(async (req, res) => { //working
         { new: true }
     ).select("-password")
 
+    console.log("Account details updated successfully:", user);
+
     return res
         .status(200)
         .json(
@@ -299,6 +307,8 @@ const updateUserAvatar = asyncHandler(async (req, res) => { //working todo:delet
         { new: true }
     ).select("-password")
 
+    console.log("Avatar updated successfully:", user);
+
     return res
         .status(200)
         .json(
@@ -334,6 +344,8 @@ const updateUserCoverImage = asyncHandler(async (req, res) => { //working todo:d
         },
         { new: true }
     ).select("-password")
+
+    console.log("Cover image updated successfully:", user);
 
     return res
         .status(200)
@@ -410,6 +422,8 @@ const getUserChannelProfile = asyncHandler(async (req, res) => { //working
         throw new ApiError(404, "channel does not exist")
     }
 
+    console.log("User channel fetched successfully:", channel[0]);
+
     return res
         .status(200)
         .json(
@@ -464,6 +478,8 @@ const getWatchHistory = asyncHandler(async (req, res) => { //working
         if (user.length === 0) {
             throw new ApiError(404, "User watch history not found");
         }
+
+        console.log("Watch history fetched successfully:", user[0].watchHistory);
 
         return res.status(200).json(
             new ApiResponse(

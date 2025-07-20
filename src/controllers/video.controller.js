@@ -76,6 +76,8 @@ const getAllVideos = asyncHandler(async (req, res) => {
         .json(new ApiResponse(404, null, "No videos found"));
     }
 
+    console.log("Videos fetched successfully:", videos);
+
     return res.status(200).json(
       new ApiResponse(
         200,
@@ -176,6 +178,8 @@ const getCurrentUserVideos = asyncHandler(async (req, res) => {
     // Fetch total count of videos (for pagination)
     const totalVideos = await Video.countDocuments(queryObject);
 
+    console.log("Videos fetched successfully:", videos);
+
     return res.status(200).json(
       new ApiResponse(
         200,
@@ -239,6 +243,8 @@ const publishAVideo = asyncHandler(async (req, res) => {
     if (!uploadedVideo) {
       throw new ApiError(500, "Internal server error while uploading video");
     }
+
+    console.log("Video published successfully:", uploadedVideo);
 
     return res
       .status(200)
@@ -328,9 +334,6 @@ const getAllVideosByUserId = asyncHandler(async (req, res) => {
 
     // Fetch videos
     const videos = await Video.aggregate(aggregationPipeline);
-    console.log("videos", videos);
-    // const videos = await Video.find({ owner: userId });
-    // console.log("Raw videos", videos);
 
     if (!videos.length) {
       return res
@@ -344,7 +347,7 @@ const getAllVideosByUserId = asyncHandler(async (req, res) => {
       ...queryObject,
     });
 
-    console.log("totalVideos", totalVideos);
+    console.log("Videos fetched successfully for userid:", videos);
 
     return res.status(200).json(
       new ApiResponse(
@@ -435,6 +438,8 @@ const getVideoById = asyncHandler(async (req, res) => {
       { new: true },
     );
 
+    console.log("fetched video details:", videoDetails[0]);
+
     return res
       .status(200)
       .json(
@@ -500,6 +505,8 @@ const updateVideo = asyncHandler(async (req, res) => {
       { new: true },
     );
 
+    console.log("Updated video details:", updatedVideo);
+
     return res
       .status(200)
       .json(new ApiResponse(200, updatedVideo, "Video updated successfully"));
@@ -535,6 +542,8 @@ const deleteVideo = asyncHandler(async (req, res) => {
       throw new ApiError(500, "Internal server error deleting video");
     }
 
+    console.log("Video deleted successfully:", deletedVideo);
+
     return res
       .status(200)
       .json(new ApiResponse(200, deletedVideo, "Video deleted successfully"));
@@ -564,6 +573,8 @@ const togglePublishStatus = asyncHandler(async (req, res) => {
     // Flip the isPublished flag
     video.isPublished = !video.isPublished;
     await video.save();
+
+    console.log("Video publish status toggled successfully:", video);
 
     return res
       .status(200)
